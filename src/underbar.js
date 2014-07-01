@@ -117,9 +117,16 @@ var _ = {};
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
     var results = [];
-    _.each(collection, function(v,i,c){
-      results.push(iterator(v,i,c));
-    });
+    if(Array.isArray(collection)){
+      for(var i =0, len = collection.length; i < len; i++){
+        results.push(iterator(collection[i], i , collection))
+      }
+    }
+    else if(typeof collection === 'object'){
+        for(var p in collection){
+          results.push(iterator(collection[p], p , collection));
+        }
+    }
     return results;
   };
 
@@ -144,6 +151,12 @@ var _ = {};
   // Calls the method named by methodName on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    return _.map(collection, function(v,i,c){
+      if(typeof functionOrKey === 'callback'){
+        //
+      }
+      return functionOrKey.apply(v);
+    })
   };
 
   // Reduces an array or object to a single value by repetitively calling
