@@ -214,6 +214,13 @@ var _ = {};
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    //Ans: is every value false?
+    iterator = iterator || _.identity;
+    return !(
+        _.every(collection, function(v,i,c){
+            return !(iterator(v,i,c));
+          })
+        );
   };
 
 
