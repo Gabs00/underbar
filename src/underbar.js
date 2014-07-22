@@ -307,8 +307,8 @@ var _ = {};
   _.memoize = function(func) {
     var store = {};
     return function(arg){
-      if(store[arg] === undefined){
-        store[arg] = func(arg);
+      if(!store.hasOwnProperty(arg)){
+        store[arg]=func(arg);
       }
       return store[arg];
     }
@@ -403,6 +403,19 @@ var _ = {};
   //
   // See the Underbar readme for details.
   _.throttle = function(func, wait) {
+    var block = false;
+    var toggle = function(){
+        block = true;
+      setTimeout(function(){
+        block = false;
+      }, wait);
+    };
+    return function(){
+      if(!block){
+        toggle();
+        return func();
+      }
+    }
   };
 
 }).call(this);
